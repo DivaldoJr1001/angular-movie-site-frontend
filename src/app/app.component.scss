@@ -1,0 +1,163 @@
+main {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: black;
+}
+
+.content-body,
+.main-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.main-body {
+  position: relative;
+  border-left: 3rem solid;
+  border-right: 3rem solid;
+  border-radius: 5rem;
+  background-color: white;
+
+  app-language-selector {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    z-index: 1000;
+  }
+
+  app-movies-list {
+    display: flex;
+    position: relative;
+    flex: 1;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-body {
+    app-language-selector {
+      right: 0;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .main-body {
+    border-left: 0.5rem solid;
+    border-right: 0.5rem solid;
+  }
+}
+
+header,
+footer {
+  display: flex;
+  padding: 1rem;
+  background-color: black;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+header {
+  font-size: x-large;
+  cursor: default;
+  user-select: none;
+
+  .title {
+    font-family: cursive;
+  }
+}
+
+footer {
+  flex-direction: column;
+
+  .link-icons {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+
+    .portfolio-icon,
+    .github-icon,
+    .linkedin-icon {
+      height: 2rem;
+      width: 2rem;
+      margin-right: 1rem;
+      fill: white;
+      cursor: pointer;
+    }
+
+    .linkedin-icon {
+      border-radius: 0.5rem;
+    }
+
+    .github-icon {
+      border-radius: 50%;
+      margin-right: 0 !important;
+    }
+  }
+
+  .dev-info {
+    cursor: default;
+    user-select: none;
+  }
+}
+
+@media (max-width: 420px) {
+  header {
+    font-size: medium !important;
+  }
+
+  footer {
+    font-size: small !important;
+  }
+}
+
+.sliding-film-roll {
+  height: 200%;
+  width: 4rem;
+  background-image: url("./../assets/animations/film-roll.png");
+  background-repeat: round;
+  background-size: contain;
+  background-color: white;
+  animation: slide-up 20s linear infinite;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.text-expansion-animation {
+  -webkit-animation: text-expansion 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  animation: text-expansion 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+@-webkit-keyframes text-expansion {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes text-expansion {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}

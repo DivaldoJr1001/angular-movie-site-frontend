@@ -1,29 +1,74 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { envVariables } from 'src/environment/environment';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpLoaderFactory } from './app.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
+import { MoviesListModule } from './pages/movies-list/movies-list.module';
+import { LanguageSelectorModule } from './shared/components/language-selector/language-selector.module';
 
 describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [AppComponent]
-  }));
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+    declarations: [AppComponent],
+    imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatTooltipModule,
+        LanguageSelectorModule,
+        MoviesListModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpBackend]
+            },
+            defaultLanguage: 'pt-BR'
+        })],
+    providers: [TranslateService, provideHttpClient(withInterceptorsFromDi())]
+}).compileComponents();
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
   });
 
-  it(`should have as title 'angular-movie-site-frontend'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-movie-site-frontend');
+  it('[Initialization] Should create the app', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-movie-site-frontend app is running!');
+  it(`[Title] Should have as title 'Angular Movie Database Application'`, () => {
+    expect(component.title).toEqual('Angular Movie Database Application');
+  });
+
+  it('[openPortfolio] Should call window.open with the correct URL', () => {
+    spyOn(window, 'open');
+
+    component.openPortfolio();
+
+    expect(window.open).toHaveBeenCalledWith(envVariables.portfolioLink + '?l=en-US', '_blank');
+  });
+
+  it('[openLinkedIn] Should call window.open with the correct URL', () => {
+    spyOn(window, 'open');
+
+    component.openLinkedIn();
+
+    expect(window.open).toHaveBeenCalledWith(envVariables.linkedInLink, '_blank');
+  });
+
+  it('[openGithub] Should call window.open with the correct URL', () => {
+    spyOn(window, 'open');
+
+    component.openGithub();
+
+    expect(window.open).toHaveBeenCalledWith(envVariables.githubLink, '_blank');
   });
 });

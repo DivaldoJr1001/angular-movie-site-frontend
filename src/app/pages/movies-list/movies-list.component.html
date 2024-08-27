@@ -1,0 +1,23 @@
+<div class="movies-list-container">
+  @let screenWidth = (screenSizeService.getScreenWidthObservable() | async) || 0;
+  <div class="category-container">
+    <div class="category-toggle-buttons" *ngIf="screenWidth >= 900">
+      <button class="toggle-option" *ngFor="let categoryId of categoryIds" [class.selected]="selectedCategory === $any(categories)[categoryId]" (click)="selectCategory($any(categories)[categoryId])">
+        {{ 'MOVIES_LIST.CATEGORIES.' + categoryId | translate }}
+      </button>
+    </div>
+
+    <div class="category-select" [matMenuTriggerFor]="categorySelectMenu" *ngIf="screenWidth < 900">
+      <div class="select-text">
+        {{ 'MOVIES_LIST.CATEGORIES.' + categoryIds[selectedCategory - 1 || 0] | translate }}
+      </div>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </div>
+
+    <mat-menu #categorySelectMenu="matMenu">
+      <button mat-menu-item *ngFor="let categoryId of categoryIds" [disabled]="$any(categories)[categoryId] === selectedCategory" (click)="selectCategory($any(categories)[categoryId])">
+        {{ 'MOVIES_LIST.CATEGORIES.' + categoryId | translate }}
+      </button>
+    </mat-menu>
+  </div>
+</div>

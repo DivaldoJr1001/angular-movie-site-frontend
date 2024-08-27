@@ -1,0 +1,60 @@
+.movies-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.category-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  .category-toggle-buttons {
+    display: flex;
+    height: 3rem;
+    border-radius: 25px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    width: 30rem;
+
+    .toggle-option {
+      flex: 1;
+      padding: 10px 20px;
+      border: none;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .toggle-option:not(:last-child) {
+      border-right: 2px solid #ccc;
+    }
+
+    .toggle-option.selected {
+      background-color: black;
+      color: white;
+    }
+  }
+
+  .category-select {
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 24px;
+
+    .select-text {
+      display: flex;
+      align-items: center;
+      font-size: larger;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+}

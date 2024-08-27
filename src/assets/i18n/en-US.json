@@ -1,0 +1,10 @@
+{
+  "SHARED": {
+    "LANGUAGE": "Language",
+
+    "pt-BR": "Portuguese (Brazil)",
+    "en-US": "English (USA)",
+
+    "RETURN_BUTTON": "Return"
+  }
+}

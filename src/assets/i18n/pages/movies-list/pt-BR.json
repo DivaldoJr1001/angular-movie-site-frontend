@@ -1,0 +1,10 @@
+{
+  "MOVIES_LIST": {
+    "CATEGORIES": {
+      "SELECT_CATEGORY": "Categoria",
+      "TRENDING": "Tendências",
+      "POPULAR": "Populares",
+      "FREE": "Grátis"
+    }
+  }
+}
