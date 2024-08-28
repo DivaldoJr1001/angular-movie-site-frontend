@@ -3,20 +3,20 @@
     {{ langStrings[currentLanguage || defaultLanguage]['LANGUAGE'] }}: &nbsp;
   </div>
 
-  <div class="flag-container" *ngFor="let lang of languages" [class.clickable]="currentLanguage !== lang" [ngStyle]="currentLanguage === lang ? {opacity: '1', border: 'solid 4px ' + borderColor } : {}" title="{{ langStrings[currentLanguage || defaultLanguage][lang] }}" (click)="currentLanguage !== lang ? changeLanguage(lang) : undefined">
-    <img [src]="pathToFlags + '/' + lang + '.svg'" alt="{{ langStrings[currentLanguage || defaultLanguage][lang] }}">
+  <div class="flag-container" *ngFor="let lang of languages" [class.clickable]="currentLanguage !== lang" [ngStyle]="currentLanguage === lang ? {opacity: '1', border: 'solid 4px ' + borderColor } : {}" title="{{ $any(langStrings[currentLanguage || defaultLanguage])[lang] }}" tabindex="0" (click)="currentLanguage !== lang ? changeLanguage(lang) : undefined" (keydown)="onKeydown($event, lang)">
+    <img [src]="pathToFlags + '/' + lang + '.svg'" alt="{{ $any(langStrings[currentLanguage || defaultLanguage])[lang] }}">
   </div>
 </div>
 
-<div class="language-selector-container clickable" [matMenuTriggerFor]="menu" *ngIf="!!compactMode && !!currentLanguage">
-  <div class="flag-container" [ngStyle]="{opacity: '1', border: 'solid 4px ' + borderColor }" title="{{ langStrings[currentLanguage || defaultLanguage][currentLanguage] }}">
-    <img [src]="pathToFlags + '/' + currentLanguage + '.svg'" alt="{{ langStrings[currentLanguage || defaultLanguage][currentLanguage] }}">
+<div class="language-selector-container clickable" [matMenuTriggerFor]="menu" *ngIf="!!compactMode && !!(currentLanguage || defaultLanguage)">
+  <div class="flag-container" [ngStyle]="{opacity: '1', border: 'solid 4px ' + borderColor }" title="{{ $any(langStrings[currentLanguage || defaultLanguage])[currentLanguage] }}">
+    <img [src]="pathToFlags + '/' + (currentLanguage || defaultLanguage) + '.svg'" alt="{{ $any(langStrings[currentLanguage || defaultLanguage])[(currentLanguage || defaultLanguage)] }}">
   </div>
   <mat-icon [ngStyle]="{color: borderColor}">arrow_drop_down</mat-icon>
 </div>
 
 <mat-menu #menu="matMenu">
   <button mat-menu-item *ngFor="let lang of languages" [disabled]="lang === currentLanguage" (click)="changeLanguage(lang)">
-    {{langStrings[currentLanguage || defaultLanguage][lang]}}
+    {{$any(langStrings[currentLanguage || defaultLanguage])[lang]}}
   </button>
 </mat-menu>

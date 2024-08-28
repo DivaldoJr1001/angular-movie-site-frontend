@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -9,24 +9,24 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class LanguageSelectorComponent implements OnInit, OnDestroy {
 
-  @Input() borderColor: string = 'black';
+  @Input() borderColor = 'black';
   @Input() updateBordersSubjectTrigger = new Subject<void>();
-  @Input() forceCompactMode: boolean = false;
-  @Input() compactScreenWidthThreshold: number = 0;
-  compactMode: boolean = false;
+  @Input() forceCompactMode = false;
+  @Input() compactScreenWidthThreshold = 0;
+  compactMode = false;
 
   screenWidth!: number;
   resizeObserver!: ResizeObserver;
 
-  bordersStyle: any = {};
+  bordersStyle: object = {};
 
-  currentLanguage: string = '';
-  defaultLanguage: string = 'pt-BR';
+  currentLanguage = '';
+  defaultLanguage = 'pt-BR';
   languages: string[] = [];
 
   pathToFlags = '../../../../assets/flags';
 
-  langStrings: { [key: string]: any } = {
+  langStrings: Record<string, LangStrings> = {
     'pt-BR': {
       'LANGUAGE': 'Linguagem',
       'pt-BR': 'Português (Brasil)',
@@ -51,7 +51,7 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
     this.currentLanguage = this.translate.currentLang;
 
     this.translate.onLangChange.pipe(takeUntil(this._onDestroy)).subscribe({
-      next: (langObj: { lang: string }) => {
+      next: langObj => {
         if (this.currentLanguage !== langObj.lang) {
           this.currentLanguage = langObj.lang;
           this.cd.detectChanges();
@@ -62,7 +62,7 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
     this.screenWidth = window.innerWidth;
 
     this.resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         this.screenWidth = entry.contentRect.width;
         if (this.screenWidth < this.compactScreenWidthThreshold && !this.compactMode) {
           this.compactMode = true;
@@ -76,7 +76,7 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
     this.resizeObserver.observe(document.body);
 
     this.updateBordersSubjectTrigger.pipe(takeUntil(this._onDestroy)).subscribe({
-      next: _ => {
+      next: () => {
         this.updateBordersStyle();
       }
     });
@@ -116,4 +116,16 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
       this.currentLanguage = lang;
     }
   }
+
+  onKeydown(event: KeyboardEvent, lang: string): void {
+    if ((event.key === 'Enter' || event.key === ' ') && this.currentLanguage !== lang) {
+      this.changeLanguage(lang);
+    }
+  }
+}
+
+interface LangStrings {
+  'LANGUAGE': string;
+  'pt-BR': string;
+  'en-US': string;
 }
