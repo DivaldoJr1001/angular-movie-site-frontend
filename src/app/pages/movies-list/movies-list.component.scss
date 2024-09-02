@@ -5,6 +5,16 @@
   width: 100%;
   padding: 1rem;
   box-sizing: border-box;
+
+  .empty-list {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 1rem;
+    margin-top: 1rem;
+  }
 }
 
 .category-container {

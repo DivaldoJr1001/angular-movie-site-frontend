@@ -48,5 +48,11 @@
     <mat-icon class="clickable" aria-hidden="false" [class.disabled]="currentPage >= totalPages - 1" [tabIndex]="0" (click)="goToPage(totalPages)">keyboard_double_arrow_right</mat-icon>
   </div>
 
-  <app-loading-spinner [blackSpinner]="true" *ngIf="!moviesListVisible"></app-loading-spinner>
+  @let emptyListContainerVisible = !loading && paginatedMovies && !paginatedMovies.results;
+  <div class="empty-list" *ngIf="emptyListContainerVisible">
+    {{ 'MOVIES_LIST.EMPTY_LIST' | translate }}
+  </div>
+
+  @let loadingSpinner = !moviesListVisible;
+  <app-loading-spinner [blackSpinner]="true" *ngIf="loadingSpinner"></app-loading-spinner>
 </div>

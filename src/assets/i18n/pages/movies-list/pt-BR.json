@@ -5,6 +5,7 @@
       "TRENDING": "Tendências",
       "POPULAR": "Populares",
       "FREE": "Grátis"
-    }
+    },
+    "EMPTY_LIST": "Nenhum filme encontrado..."
   }
 }

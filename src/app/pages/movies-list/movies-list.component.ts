@@ -210,5 +210,6 @@ export interface MoviesListLangStrings {
     'TRENDING'?: string;
     'POPULAR'?: string;
     'FREE'?: string;
-  }
+  },
+  'EMPTY_LIST'?: string
 }

@@ -5,6 +5,7 @@
       "TRENDING": "Trending",
       "POPULAR": "Popular",
       "FREE": "Free"
-    }
+    },
+    "EMPTY_LIST": "No movie found..."
   }
 }
