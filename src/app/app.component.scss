@@ -12,14 +12,15 @@ main {
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow: hidden;
 }
 
 .main-body {
   position: relative;
-  border-left: 3rem solid;
-  border-right: 3rem solid;
-  border-radius: 5rem;
+  border-radius: 2rem;
   background-color: white;
+  border-left: 0.5rem solid;
+  border-right: 0.5rem solid;
 
   app-language-selector {
     position: absolute;
@@ -32,21 +33,7 @@ main {
     display: flex;
     position: relative;
     flex: 1;
-  }
-}
-
-@media (max-width: 1200px) {
-  .main-body {
-    app-language-selector {
-      right: 0;
-    }
-  }
-}
-
-@media (max-width: 600px) {
-  .main-body {
-    border-left: 0.5rem solid;
-    border-right: 0.5rem solid;
+    overflow: hidden;
   }
 }
 

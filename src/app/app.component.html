@@ -15,9 +15,9 @@
 
     <footer>
       <div class="link-icons">
-        <img class="portfolio-icon hover-glow" src="../../../../assets/icons/portfolio.svg" alt="Portfolio" matTooltip="Portfolio" (click)="openPortfolio()">
-        <img class="linkedin-icon hover-glow" src="../../../../assets/icons/linkedin.svg" alt="LinkedIn" matTooltip="LinkedIn" (click)="openLinkedIn()">
-        <img class="github-icon hover-glow" src="../../../../assets/icons/github.svg" alt="Github" matTooltip="Github" (click)="openGithub()">
+        <img class="portfolio-icon hover-glow" src="../../../../assets/icons/portfolio.svg" alt="Portfolio" matTooltip="Portfolio" (click)="openPortfolio()" (keydown.enter)="openPortfolio()" tabindex="0">
+        <img class="linkedin-icon hover-glow" src="../../../../assets/icons/linkedin.svg" alt="LinkedIn" matTooltip="LinkedIn" (click)="openLinkedIn()" (keydown.enter)="openLinkedIn()" tabindex="0">
+        <img class="github-icon hover-glow" src="../../../../assets/icons/github.svg" alt="Github" matTooltip="Github" (click)="openGithub()" (keydown.enter)="openGithub()" tabindex="0">
       </div>
       <div class="dev-info">{{'© 2024 Divaldo Aderaldo de Oliveira Júnior'}}</div>
     </footer>

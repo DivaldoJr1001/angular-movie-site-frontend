@@ -1,5 +1,7 @@
+@let loading = (loading$ | async);
+@let screenWidth = (screenSizeService.getScreenWidthObservable() | async) || 0;
+
 <div class="movies-list-container">
-  @let screenWidth = (screenSizeService.getScreenWidthObservable() | async) || 0;
   <div class="category-container">
     <div class="category-toggle-buttons" *ngIf="screenWidth >= 900">
       <button class="toggle-option" *ngFor="let categoryId of categoryIds" [class.selected]="selectedCategory === $any(categories)[categoryId]" (click)="selectCategory($any(categories)[categoryId])">
@@ -20,4 +22,31 @@
       </button>
     </mat-menu>
   </div>
+
+  @let paginatedMovies = (paginatedMovies$ | async);
+  @let moviesListVisible = !loading && paginatedMovies && !!paginatedMovies.results;
+  <div class="paginated-movies" *ngIf="moviesListVisible">
+    <app-movie-card *ngFor="let movie of paginatedMovies.results" [movie]="movie"></app-movie-card>
+  </div>
+
+  <div class="movies-paginator" *ngIf="moviesListVisible">
+    <mat-icon class="clickable" aria-hidden="false" [class.disabled]="currentPage <= 2" [tabIndex]="0" (click)="goToPage(1)">keyboard_double_arrow_left</mat-icon>
+
+    <mat-icon class="clickable" aria-hidden="false" [class.disabled]="currentPage === 1" [tabIndex]="0" (click)="goToPage(currentPage - 1)">chevron_left</mat-icon>
+
+    <mat-select class="custom-select" [(value)]="currentPage" (selectionChange)="goToPage($event.value)" [tabIndex]="0">
+      <mat-select-trigger>
+        <div class="custom-select-trigger">
+          {{ currentPage }}
+        </div>
+      </mat-select-trigger>
+      <mat-option *ngFor="let page of pageOptions" [value]="page">{{ page }}</mat-option>
+    </mat-select>
+
+    <mat-icon class="clickable" aria-hidden="false" [class.disabled]="currentPage === totalPages" [tabIndex]="0" (click)="goToPage(currentPage + 1)">chevron_right</mat-icon>
+
+    <mat-icon class="clickable" aria-hidden="false" [class.disabled]="currentPage >= totalPages - 1" [tabIndex]="0" (click)="goToPage(totalPages)">keyboard_double_arrow_right</mat-icon>
+  </div>
+
+  <app-loading-spinner [blackSpinner]="true" *ngIf="!moviesListVisible"></app-loading-spinner>
 </div>

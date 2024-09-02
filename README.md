@@ -1,27 +1,77 @@
-# AngularMovieSiteFrontend
+# Movie Database Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.
+## Overview
 
-## Development server
+This project is a movie database application built using Angular 18.10.0 and Angular Material. It integrates with the TMDB (The Movie Database) API to fetch and display information about movies, including details such as title, poster, release date, and ratings. Users can browse various categories of movies and navigate through paginated lists of results.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+- **Movie Listings**: Browse movies categorized as Trending, Popular, or Free.
+- **Movie Details**: View detailed information about individual movies.
+- **Language Support**: Multi-language support with dynamic string fetching.
+- **Responsive Design**: Optimized for various screen sizes using Angular Material's responsive components.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Technologies Used
 
-## Build
+- **Angular 18.10.0**: The core framework for building the front-end of the application.
+- **Angular Material**: Provides a set of reusable UI components that follow Material Design principles.
+- **TMDB API**: Used to fetch movie data including posters, titles, ratings, and more.
+- **RxJS** : Reactive programming library used for handling asynchronous data streams.
+- **ngx-translate**: Manages multi-language support.
+- **ngx-translate-multi-http-loader** : Loader to manage multiple translation files.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Installation
 
-## Running unit tests
+### Prerequisites
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Before running the project, ensure you have the following installed:
 
-## Running end-to-end tests
+- Node.js (v16.x or higher)
+- Angular CLI (v18.10.0)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Setup
 
-## Further help
+1. Clone the repository:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+   ```bash
+   git clone https://github.com/DivaldoJr1001/angular-movie-site-frontend.git
+   cd angular-movie-site-frontend
+   ```
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+
+   ```bash
+   ng serve
+   ```
+
+   `ng serve`
+
+The application will be accessible at `http://localhost:4200`.
+
+## Usage
+
+### Browsing Movies
+
+- Use the category selector to switch between Trending, Popular, and Free movies.
+- Use the pagination controls to navigate through the pages of movies.
+
+## Testing
+
+Unit tests are provided using Jasmine and Karma. To run the tests:
+
+```bash
+ng test
+```
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [TMDB](https://www.themoviedb.org/) for providing the movie data used in this application.
+- The Angular and Angular Material teams for their awesome work.

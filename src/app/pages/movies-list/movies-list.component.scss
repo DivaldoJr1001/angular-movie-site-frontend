@@ -28,7 +28,9 @@
       color: black;
       cursor: pointer;
       font-size: 16px;
-      transition: background-color 0.3s, color 0.3s;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
     }
 
     .toggle-option:not(:last-child) {
@@ -56,5 +58,78 @@
       font-weight: bold;
       text-decoration: underline;
     }
+  }
+}
+
+.paginated-movies {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  border: 1px solid black;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  margin: 1rem 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.movies-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  padding: 0.5rem;
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  .disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+  }
+
+  .current-page {
+    font-weight: bold;
+    margin: 0 8px;
+  }
+
+  .mat-icon {
+    font-size: 24px;
+  }
+
+  .custom-select {
+    margin: 0 8px;
+    width: 5rem;
+    border: 2px solid white;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+
+    .mat-select-trigger {
+      padding: 0;
+    }
+
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border: 1px solid black;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    ::ng-deep .mat-mdc-select-arrow-wrapper {
+      display: none !important;
+    }
+  }
+
+  .custom-select:focus-visible {
+    border: 2px solid black !important;
   }
 }

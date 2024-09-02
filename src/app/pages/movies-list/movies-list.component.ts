@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router, Scroll } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, first, takeUntil } from 'rxjs';
-import { ScreenSizeService } from 'src/app/services/screen-size.service';
+import { BehaviorSubject, debounceTime, first, Observable, Subject, takeUntil } from 'rxjs';
+import { MovieApiService } from 'src/app/core/api/movie-api.service';
+import { emptyPaginatedMovies, PaginatedMovies } from 'src/app/core/modules/movie.module';
+import { ScreenSizeService } from 'src/app/core/services/screen-size.service';
 import { DestroyEventNoticeComponent } from 'src/app/shared/extensions/destroy-event-notice.component';
 
 @Component({
@@ -11,39 +13,68 @@ import { DestroyEventNoticeComponent } from 'src/app/shared/extensions/destroy-e
   styleUrls: ['./movies-list.component.scss']
 })
 export class MoviesListComponent extends DestroyEventNoticeComponent implements OnInit {
-  selectedCategory: number = 1;
+  selectedCategory = 1;
+  currentPage = 1;
+  totalPages = 500;
+  pageOptions: number[] = [];
+
+  fetchPaginatedMoviesTrigger = new Subject<void>();
+
+  paginatedMovies$ = new BehaviorSubject<PaginatedMovies>(emptyPaginatedMovies());
+  loading$ = new BehaviorSubject<boolean>(true);
 
   categories = CategoriesEnum;
 
   categoryIds = ['TRENDING', 'POPULAR', 'FREE'];
 
-  langStrings: any = {};
+  langStrings!: MoviesListLangStrings;
   langStringsFetchAttempts = 0;
   langStringMaxFetchAttempts = 3;
+
+  subscriptionDebounceTime = 50;
 
   constructor(
     protected screenSizeService: ScreenSizeService,
     protected translate: TranslateService,
-    protected router: Router
+    protected router: Router,
+    protected movieApiService: MovieApiService
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.translate.onLangChange.pipe(takeUntil(this._onDestroy)).subscribe({
-      next: (_: any) => {
-        this.fetchLanguageStrings();
+    this.fetchPaginatedMoviesTrigger.pipe(takeUntil(this._onDestroy), debounceTime(this.subscriptionDebounceTime)).subscribe({
+      next: () => {
+        this.fetchPaginatedMovies(this.currentPage);
       }
     });
 
-    this.router.events.pipe(takeUntil(this._onDestroy)).subscribe({
-      next: (event) => {
-        if (event instanceof NavigationEnd) {
-          const queryParams = this.router.parseUrl(this.router.url).queryParams;
+    this.paginatedMovies$.pipe(takeUntil(this._onDestroy), debounceTime(this.subscriptionDebounceTime)).subscribe({
+      next: paginatedMovies => {
+        this.totalPages = paginatedMovies.total_pages < 500 ? paginatedMovies.total_pages : 500;
+        this.pageOptions = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+      }
+    });
 
-          if (queryParams['category'] && parseInt(queryParams['category']) !== this.selectedCategory) {
-            this.selectCategory(parseInt(queryParams['category']));
-          }
+    this.translate.onLangChange.pipe(takeUntil(this._onDestroy)).subscribe({
+      next: () => {
+        this.fetchLanguageStrings();
+        this.fetchPaginatedMoviesTrigger.next();
+      }
+    });
+
+    this.router.events.pipe(takeUntil(this._onDestroy), debounceTime(50), first()).subscribe({
+      next: (event) => {
+        const scrollEvent = event as Scroll;
+
+        const queryParams = this.router.parseUrl(scrollEvent.routerEvent.url).queryParams;
+
+        if (queryParams['category'] && parseInt(queryParams['category']) !== this.selectedCategory) {
+          this.selectCategory(parseInt(queryParams['category']));
+        }
+
+        if (queryParams['page'] && parseInt(queryParams['page']) !== this.currentPage) {
+          this.goToPage(parseInt(queryParams['page']));
         }
       }
     });
@@ -57,10 +88,10 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
           this.langStringsFetchAttempts = 0;
         } else {
           if (this.langStringMaxFetchAttempts < this.langStringMaxFetchAttempts) {
-            setTimeout((_: any) => {
+            setTimeout(() => {
               this.langStringsFetchAttempts++;
               this.fetchLanguageStrings();
-            }, 1000);
+            }, 200);
           }
         }
       }
@@ -70,13 +101,13 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
   getCurrentCategoryName(): string {
     switch (this.selectedCategory) {
       case CategoriesEnum.TRENDING: {
-        return (this.langStrings['CATEGORIES'] as any)?.['TRENDING'];
+        return this.langStrings.CATEGORIES?.TRENDING || '';
       }
       case CategoriesEnum.POPULAR: {
-        return (this.langStrings['CATEGORIES'] as any)?.['POPULAR'];
+        return this.langStrings.CATEGORIES?.POPULAR || '';
       }
       case CategoriesEnum.FREE: {
-        return (this.langStrings['CATEGORIES'] as any)?.['FREE'];
+        return this.langStrings.CATEGORIES?.FREE || '';
       }
     }
 
@@ -86,9 +117,61 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
   selectCategory(category: number) {
     this.selectedCategory = category;
 
+    this.triggerLoading();
+    this.currentPage = 1;
+    this.updateUrlWithParams();
+
+    this.fetchPaginatedMoviesTrigger.next();
+  }
+
+  async fetchPaginatedMovies(page = 1): Promise<void> {
+    this.loading$.next(true);
+
+    if (this.currentPage !== page) {
+      this.currentPage = page;
+    }
+
+    let fetchSource!: Observable<PaginatedMovies>;
+
+    switch (this.selectedCategory) {
+      case CategoriesEnum.TRENDING: {
+        fetchSource = this.movieApiService.getTrendingMovies(page, this.translate.currentLang || this.translate.defaultLang).pipe(first());
+        break;
+      }
+      case CategoriesEnum.POPULAR: {
+        fetchSource = this.movieApiService.getPopularMovies(page, this.translate.currentLang || this.translate.defaultLang).pipe(first());
+        break;
+      }
+      case CategoriesEnum.FREE: {
+        fetchSource = this.movieApiService.getFreeMovies(page, this.translate.currentLang || this.translate.defaultLang).pipe(first());
+        break;
+      }
+    }
+
+    fetchSource.subscribe({
+      next: paginatedMovies => {
+        this.paginatedMovies$.next(paginatedMovies);
+        this.finishLoading(200);
+      }
+    });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= 500) {
+      this.triggerLoading();
+      this.currentPage = page;
+      this.updateUrlWithParams();
+
+      this.fetchPaginatedMoviesTrigger.next();
+    }
+  }
+
+  updateUrlWithParams(): void {
     let url = this.router.url.split('?')[0];
     const queryParams = this.router.parseUrl(this.router.url).queryParams;
-    queryParams['category'] = category;
+
+    queryParams['category'] = this.selectedCategory;
+    queryParams['page'] = this.currentPage;
 
     if (Object.keys(queryParams).length > 0) {
       url += '?';
@@ -104,10 +187,28 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
     this.router.navigateByUrl(url);
   }
 
+  triggerLoading(): void {
+    this.loading$.next(true);
+  }
+
+  finishLoading(delay = 0) {
+    setTimeout(() => {
+      this.loading$.next(false);
+    }, delay);
+  }
 }
 
-enum CategoriesEnum {
+export enum CategoriesEnum {
   TRENDING = 1,
   POPULAR = 2,
   FREE = 3
+}
+
+export interface MoviesListLangStrings {
+  'CATEGORIES'?: {
+    'SELECT_CATEGORY'?: string,
+    'TRENDING'?: string;
+    'POPULAR'?: string;
+    'FREE'?: string;
+  }
 }

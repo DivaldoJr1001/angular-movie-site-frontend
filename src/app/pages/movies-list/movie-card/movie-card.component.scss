@@ -1,0 +1,44 @@
+.movie-card {
+  display: flex;
+  padding: 1rem;
+  margin: 1rem;
+  box-sizing: border-box;
+  width: 12rem;
+  border-radius: 1rem;
+
+  img {
+    border-radius: 1rem;
+    width: 10rem;
+    margin-top: 1rem;
+  }
+
+  mat-card-header {
+    text-align: left;
+  }
+
+  mat-card-title {
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+
+  mat-card-subtitle {
+    font-size: 0.7rem;
+    color: rgb(151, 95, 95);
+  }
+
+  .score {
+    display: flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid black;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    position: absolute;
+    bottom: 0.1rem;
+    left: 0.1rem;
+    cursor: default;
+  }
+}

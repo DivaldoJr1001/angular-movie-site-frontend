@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { envVariables } from 'src/environment/environment';
-import { ScreenSizeService } from './services/screen-size.service';
+import { ScreenSizeService } from './core/services/screen-size.service';
 import { DestroyEventNoticeComponent } from './shared/extensions/destroy-event-notice.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { DestroyEventNoticeComponent } from './shared/extensions/destroy-event-n
 export class AppComponent extends DestroyEventNoticeComponent implements OnInit {
   title = 'Angular Movie Database Application';
 
-  loadingRouteConfig: boolean = false;
+  loadingRouteConfig = false;
 
   constructor(
     protected translate: TranslateService,
@@ -34,7 +34,7 @@ export class AppComponent extends DestroyEventNoticeComponent implements OnInit 
       if (event instanceof RouteConfigLoadStart) {
         this.loadingRouteConfig = true;
       } else if (event instanceof RouteConfigLoadEnd) {
-        setTimeout((_: any) => {
+        setTimeout(() => {
           this.loadingRouteConfig = false;
           this.cd.detectChanges();
         }, 500);
@@ -42,7 +42,7 @@ export class AppComponent extends DestroyEventNoticeComponent implements OnInit 
     });
 
     this.router.events.pipe(takeUntil(this._onDestroy)).subscribe({
-      next: (event: any) => {
+      next: (event: unknown) => {
         if (event instanceof NavigationEnd) {
           const availableLanguages = this.translate.getLangs();
 
