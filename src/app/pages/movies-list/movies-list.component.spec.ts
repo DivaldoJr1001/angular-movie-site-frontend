@@ -7,12 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { EventType, Router, Scroll } from '@angular/router';
 import { TranslateFakeLoader, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { MovieApiService } from 'src/app/core/api/movie-api.service';
 import { PaginatedMovies } from 'src/app/core/modules/movie.module';
 import { ScreenSizeService } from 'src/app/core/services/screen-size.service';
+import { LoadingSpinnerModule } from 'src/app/shared/components/loading-spinner/loading-spinner.module';
 import { CategoriesEnum, MoviesListComponent } from './movies-list.component';
 
 describe('MoviesListComponent', () => {
@@ -28,7 +29,7 @@ describe('MoviesListComponent', () => {
   };
 
   const urlSubject = new BehaviorSubject<string>('url');
-  const mockRouterEvents = new Subject<RouterEvent>();
+  const mockRouterEvents = new Subject<Scroll>();
 
   const mockRouter = {
     events: mockRouterEvents,
@@ -60,13 +61,6 @@ describe('MoviesListComponent', () => {
     }
   };
 
-  // const mockTranslate = {
-  //   get: jasmine.createSpy('get').and.returnValue(new Subject()),
-  //   onLangChange: new Subject(),
-  //   currentLang: 'en-US',
-  //   defaultLang: 'en-US'
-  // };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MoviesListComponent],
@@ -78,6 +72,7 @@ describe('MoviesListComponent', () => {
         MatIconModule,
         MatMenuModule,
         MatPaginatorModule,
+        LoadingSpinnerModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
@@ -97,8 +92,8 @@ describe('MoviesListComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(MoviesListComponent);
-    component = fixture.componentInstance;
     router = TestBed.inject(Router);
+    component = fixture.componentInstance;
 
     fixture.detectChanges();
   });
@@ -149,16 +144,20 @@ describe('MoviesListComponent', () => {
     expect(router.navigateByUrl).toHaveBeenCalledWith(jasmine.stringMatching(/category=1&page=5/));
   });
 
-  it('should update selectedCategory and currentPage based on URL params on NavigationEnd', fakeAsync(() => {
-    component.ngOnInit();
-
+  it('should update selectedCategory and currentPage based on URL params on Scroll event that triggers on first load', fakeAsync(() => {
     spyOn(component, 'selectCategory');
     spyOn(component, 'goToPage');
 
     const newUrl = '/?category=2&page=3';
 
     mockRouter.url = newUrl;
-    mockRouterEvents.next(new NavigationEnd(0, newUrl, newUrl));
+    mockRouterEvents.next(new Scroll({
+      id: 0,
+      url: newUrl,
+      reason: '',
+      code: 0,
+      type: EventType.NavigationSkipped
+    }, null, null));
     tick(component.subscriptionDebounceTime);
 
     expect(component.selectCategory).toHaveBeenCalledWith(2);

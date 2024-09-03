@@ -63,18 +63,19 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
       }
     });
 
-    this.router.events.pipe(takeUntil(this._onDestroy), debounceTime(50), first()).subscribe({
+    this.router.events.pipe(takeUntil(this._onDestroy), debounceTime(50)).subscribe({
       next: (event) => {
         const scrollEvent = event as Scroll;
+        if (event) {
+          const queryParams = this.router.parseUrl(scrollEvent.routerEvent.url).queryParams;
 
-        const queryParams = this.router.parseUrl(scrollEvent.routerEvent.url).queryParams;
+          if (queryParams['category'] && parseInt(queryParams['category']) !== this.selectedCategory) {
+            this.selectCategory(parseInt(queryParams['category']));
+          }
 
-        if (queryParams['category'] && parseInt(queryParams['category']) !== this.selectedCategory) {
-          this.selectCategory(parseInt(queryParams['category']));
-        }
-
-        if (queryParams['page'] && parseInt(queryParams['page']) !== this.currentPage) {
-          this.goToPage(parseInt(queryParams['page']));
+          if (queryParams['page'] && parseInt(queryParams['page']) !== this.currentPage) {
+            this.goToPage(parseInt(queryParams['page']));
+          }
         }
       }
     });

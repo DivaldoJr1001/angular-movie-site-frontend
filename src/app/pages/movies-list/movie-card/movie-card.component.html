@@ -1,10 +1,13 @@
-<mat-card class="movie-card mat-elevation-z5">
+@let loading = (loading$ | async);
+
+<mat-card class="movie-card">
   <mat-card-header>
-    <mat-card-title>{{ movie.title }}</mat-card-title>
+    <mat-card-title class="movie-title">{{ movie.title }}</mat-card-title>
     <mat-card-subtitle>{{ movie.release_date | date }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image [src]="posterUrl" alt="{{ movie.title }} poster">
-  <div class="score" [matTooltip]="percentageScore + '%'">
+  <img mat-card-image [ngStyle]="loading ? { display: 'none' } : {}" [src]="posterUrl" alt="{{ movie.title }} poster" (load)="finishLoading()">
+  <div class="score" [matTooltip]="percentageScore + '%'" *ngIf="!loading">
     {{ percentageScore }}%
   </div>
+  <app-loading-spinner [blackSpinner]="true" *ngIf="loading"></app-loading-spinner>
 </mat-card>
