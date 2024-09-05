@@ -83,6 +83,10 @@
   overflow-y: auto;
   flex-wrap: wrap;
   justify-content: center;
+
+  app-movie-card {
+    align-self: center;
+  }
 }
 
 .movies-paginator {
