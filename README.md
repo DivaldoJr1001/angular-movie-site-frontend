@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a movie database application built using Angular 18.10.0 and Angular Material. It integrates with the TMDB (The Movie Database) API to fetch and display information about movies, including details such as title, poster, release date, and ratings. Users can browse various categories of movies and navigate through paginated lists of results.
+This project is a movie database application built using Angular 18.10.0 and Angular Material. It integrates with the TMDB (The Movie Database) API to fetch and display information about movies, including details such as title, poster, release date, and ratings. Users can browse various categories of movies and navigate through paginated lists of results. The project's responsive design can adapt to screens as small as 320px wide.
 
 ## Features
 
