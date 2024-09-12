@@ -1,18 +1,40 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { Router, Scroll } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, debounceTime, first, Observable, Subject, takeUntil } from 'rxjs';
 import { MovieApiService } from 'src/app/core/api/movie-api.service';
 import { emptyPaginatedMovies, PaginatedMovies } from 'src/app/core/modules/movie.module';
 import { ScreenSizeService } from 'src/app/core/services/screen-size.service';
+import { LoadingSpinnerModule } from 'src/app/shared/components/loading-spinner/loading-spinner.module';
 import { DestroyEventNoticeComponent } from 'src/app/shared/extensions/destroy-event-notice.component';
+import { MovieCardComponent } from './movie-card/movie-card.component';
 
 @Component({
   selector: 'app-movies-list',
   templateUrl: './movies-list.component.html',
-  styleUrls: ['./movies-list.component.scss']
+  styleUrls: ['./movies-list.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatIconModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MovieCardComponent,
+    LoadingSpinnerModule
+  ]
 })
-export class MoviesListComponent extends DestroyEventNoticeComponent implements OnInit {
+export class MoviesListStandaloneComponent extends DestroyEventNoticeComponent implements OnInit {
   selectedCategory = 1;
   currentPage = 1;
   totalPages = 500;
@@ -69,13 +91,17 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
         if (event) {
           const queryParams = this.router.parseUrl(scrollEvent.routerEvent.url).queryParams;
 
-          if (queryParams['category'] && parseInt(queryParams['category']) !== this.selectedCategory) {
-            this.selectCategory(parseInt(queryParams['category']));
+          const category = parseInt(queryParams['category'] || 1);
+
+          if (category !== this.selectedCategory) {
+            this.selectCategory(parseInt(queryParams['category']), false);
           }
 
           if (queryParams['page'] && parseInt(queryParams['page']) !== this.currentPage) {
-            this.goToPage(parseInt(queryParams['page']));
+            this.goToPage(parseInt(queryParams['page']), false);
           }
+
+          this.fetchPaginatedMoviesTrigger.next();
         }
       }
     });
@@ -115,14 +141,28 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
     return '';
   }
 
-  selectCategory(category: number) {
+  selectCategory(category: number, trigger = true) {
     this.selectedCategory = category;
 
     this.triggerLoading();
     this.currentPage = 1;
     this.updateUrlWithParams();
 
-    this.fetchPaginatedMoviesTrigger.next();
+    if (trigger) {
+      this.fetchPaginatedMoviesTrigger.next();
+    }
+  }
+
+  goToPage(page: number, trigger = true): void {
+    if (page >= 1 && page <= 500) {
+      this.triggerLoading();
+      this.currentPage = page;
+      this.updateUrlWithParams();
+
+      if (trigger) {
+        this.fetchPaginatedMoviesTrigger.next();
+      }
+    }
   }
 
   async fetchPaginatedMovies(page = 1): Promise<void> {
@@ -155,16 +195,6 @@ export class MoviesListComponent extends DestroyEventNoticeComponent implements 
         this.finishLoading(200);
       }
     });
-  }
-
-  goToPage(page: number): void {
-    if (page >= 1 && page <= 500) {
-      this.triggerLoading();
-      this.currentPage = page;
-      this.updateUrlWithParams();
-
-      this.fetchPaginatedMoviesTrigger.next();
-    }
   }
 
   updateUrlWithParams(): void {

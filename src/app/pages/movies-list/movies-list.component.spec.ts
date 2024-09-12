@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,11 +14,11 @@ import { MovieApiService } from 'src/app/core/api/movie-api.service';
 import { PaginatedMovies } from 'src/app/core/modules/movie.module';
 import { ScreenSizeService } from 'src/app/core/services/screen-size.service';
 import { LoadingSpinnerModule } from 'src/app/shared/components/loading-spinner/loading-spinner.module';
-import { CategoriesEnum, MoviesListComponent } from './movies-list.component';
+import { CategoriesEnum, MoviesListStandaloneComponent } from './movies-list.component';
 
-describe('MoviesListComponent', () => {
-  let component: MoviesListComponent;
-  let fixture: ComponentFixture<MoviesListComponent>;
+describe('MoviesListStandaloneComponent', () => {
+  let component: MoviesListStandaloneComponent;
+  let fixture: ComponentFixture<MoviesListStandaloneComponent>;
   let router: Router;
 
   const mockPaginatedMovies: PaginatedMovies = {
@@ -63,7 +63,6 @@ describe('MoviesListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MoviesListComponent],
       imports: [
         CommonModule,
         MatFormFieldModule,
@@ -71,6 +70,7 @@ describe('MoviesListComponent', () => {
         MatOptionModule,
         MatIconModule,
         MatMenuModule,
+        MoviesListStandaloneComponent,
         MatPaginatorModule,
         LoadingSpinnerModule,
         TranslateModule.forRoot({
@@ -91,7 +91,7 @@ describe('MoviesListComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MoviesListComponent);
+    fixture = TestBed.createComponent(MoviesListStandaloneComponent);
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
 
@@ -159,9 +159,10 @@ describe('MoviesListComponent', () => {
       type: EventType.NavigationSkipped
     }, null, null));
     tick(component.subscriptionDebounceTime);
+    discardPeriodicTasks();
 
-    expect(component.selectCategory).toHaveBeenCalledWith(2);
-    expect(component.goToPage).toHaveBeenCalledWith(3);
+    expect(component.selectCategory).toHaveBeenCalledWith(2, false);
+    expect(component.goToPage).toHaveBeenCalledWith(3, false);
   }));
 
   it('should call fetchPaginatedMovies on category selection and page change', fakeAsync(() => {

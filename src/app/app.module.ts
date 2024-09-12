@@ -7,8 +7,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MoviesListStandaloneComponent } from './pages/movies-list/movies-list.component';
 import { LanguageSelectorModule } from './shared/components/language-selector/language-selector.module';
-import { MoviesListModule } from './pages/movies-list/movies-list.module';
 
 export function HttpLoaderFactory(_httpBackend: HttpBackend) {
   return new MultiTranslateHttpLoader(_httpBackend, [
@@ -25,7 +25,7 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
         BrowserAnimationsModule,
         MatTooltipModule,
         LanguageSelectorModule,
-        MoviesListModule,
+        MoviesListStandaloneComponent,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

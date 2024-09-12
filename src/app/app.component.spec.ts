@@ -8,8 +8,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { MoviesListModule } from './pages/movies-list/movies-list.module';
 import { LanguageSelectorModule } from './shared/components/language-selector/language-selector.module';
+import { MoviesListStandaloneComponent } from './pages/movies-list/movies-list.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -23,7 +23,7 @@ describe('AppComponent', () => {
         BrowserAnimationsModule,
         MatTooltipModule,
         LanguageSelectorModule,
-        MoviesListModule,
+        MoviesListStandaloneComponent,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -52,7 +52,7 @@ describe('AppComponent', () => {
 
     component.openPortfolio();
 
-    expect(window.open).toHaveBeenCalledWith(envVariables.portfolioLink + '?l=en-US', '_blank');
+    expect(window.open).toHaveBeenCalledWith(envVariables.portfolioLink + '?l=pt-BR', '_blank');
   });
 
   it('[openLinkedIn] Should call window.open with the correct URL', () => {

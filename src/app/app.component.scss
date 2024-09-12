@@ -29,7 +29,7 @@ main {
     z-index: 1000;
   }
 
-  app-movies-list {
+  ::ng-deep app-movies-list {
     display: flex;
     position: relative;
     flex: 1;

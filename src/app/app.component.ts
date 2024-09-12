@@ -75,7 +75,8 @@ export class AppComponent extends DestroyEventNoticeComponent implements OnInit 
 
   openPortfolio(): void {
     const link = envVariables.portfolioLink;
-    window.open(link + '?l=en-US', "_blank");
+    const lang = this.translate.currentLang || this.translate.defaultLang;
+    window.open(link + `?l=${lang}`, "_blank");
   }
 
   openGithub(): void {

@@ -78,7 +78,6 @@ describe('MovieCardComponent', () => {
 
   it('should display the movie title', () => {
     const titleElement = debugElement.query(By.css('.movie-title')).nativeElement;
-    console.log(debugElement.query(By.css('.movie-title')).nativeElement);
     expect(titleElement.textContent).toContain('Mock Movie');
   });
 
