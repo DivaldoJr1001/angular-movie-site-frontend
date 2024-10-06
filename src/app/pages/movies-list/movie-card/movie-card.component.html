@@ -1,6 +1,6 @@
 @let loading = (loading$ | async);
 
-<mat-card class="movie-card">
+<mat-card class="movie-card" (click)="openDetails()">
   <mat-card-header>
     <mat-card-title class="movie-title">{{ movie.title }}</mat-card-title>
     <mat-card-subtitle>{{ movie.release_date | date }}</mat-card-subtitle>

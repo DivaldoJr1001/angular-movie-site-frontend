@@ -1,0 +1,41 @@
+.dialog-container {
+  position: relative;
+  max-height: 90vh;
+  max-width: 500px;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.close-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+}
+
+.dialog-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.dialog-content img {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.dialog-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.dialog-content p strong {
+  font-weight: 600;
+}

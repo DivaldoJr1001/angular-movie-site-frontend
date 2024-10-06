@@ -13,7 +13,8 @@ import { LanguageSelectorModule } from './shared/components/language-selector/la
 export function HttpLoaderFactory(_httpBackend: HttpBackend) {
   return new MultiTranslateHttpLoader(_httpBackend, [
     '/assets/i18n/',
-    '/assets/i18n/pages/movies-list/'
+    '/assets/i18n/pages/movies-list/',
+    '/assets/i18n/dialogs/movie-info-dialog/'
   ]);
 }
 

@@ -1,0 +1,9 @@
+{
+  "MOVIE_DIALOG": {
+    "RELEASE_DATE": "Data de Lançamento:",
+    "OVERVIEW": "Sinopse:",
+    "VOTE_AVERAGE": "Pontuação:",
+    "VOTE_COUNT": "Número de Votos:",
+    "GENRES": "Gêneros:"
+  }
+}

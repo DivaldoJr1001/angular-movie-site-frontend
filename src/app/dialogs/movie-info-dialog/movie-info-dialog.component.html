@@ -1,0 +1,16 @@
+<div class="dialog-container">
+  <button mat-icon-button mat-dialog-close class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+  <div class="dialog-header">
+    <h1>{{ data.title }}</h1>
+  </div>
+  <div class="dialog-content">
+    <img [src]="'https://image.tmdb.org/t/p/w500/' + data.poster_path" alt="{{ data.title }} Poster">
+    <p><strong>{{ 'MOVIE_DIALOG.RELEASE_DATE' | translate }}</strong> {{ data.release_date }}</p>
+    <p *ngIf="movieGenres.length > 0"><strong>{{ 'MOVIE_DIALOG.GENRES' | translate }}</strong> {{ getGenresString() }}</p>
+    <p><strong>{{ 'MOVIE_DIALOG.OVERVIEW' | translate }}</strong> {{ data.overview }}</p>
+    <p><strong>{{ 'MOVIE_DIALOG.VOTE_AVERAGE' | translate }}</strong> {{ getVotesAverage() }}</p>
+    <p><strong>{{ 'MOVIE_DIALOG.VOTE_COUNT' | translate }}</strong> {{ data.vote_count }}</p>
+  </div>
+</div>

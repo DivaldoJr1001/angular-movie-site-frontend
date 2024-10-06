@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart
 import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs';
 import { envVariables } from 'src/environment/environment';
+import { GenresDataService } from './core/services/genres-data.service';
 import { ScreenSizeService } from './core/services/screen-size.service';
 import { DestroyEventNoticeComponent } from './shared/extensions/destroy-event-notice.component';
 
@@ -21,7 +22,8 @@ export class AppComponent extends DestroyEventNoticeComponent implements OnInit 
     protected router: Router,
     protected activatedRoute: ActivatedRoute,
     protected cd: ChangeDetectorRef,
-    protected screenSizeService: ScreenSizeService
+    protected screenSizeService: ScreenSizeService,
+    private genresDataService: GenresDataService
   ) {
     translate.addLangs(['pt-BR', 'en-US']);
     super();

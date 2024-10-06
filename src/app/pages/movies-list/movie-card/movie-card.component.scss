@@ -5,6 +5,7 @@
   box-sizing: border-box;
   width: 12rem;
   border-radius: 1rem;
+  cursor: pointer;
 
   img {
     border-radius: 1rem;
@@ -39,6 +40,5 @@
     position: absolute;
     bottom: 0.1rem;
     left: 0.1rem;
-    cursor: default;
   }
 }

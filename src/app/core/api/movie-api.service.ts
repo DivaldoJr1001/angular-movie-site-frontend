@@ -46,4 +46,13 @@ export class MovieApiService {
 
     return this.http.get<PaginatedMovies>(url, { params });
   }
+
+  getGenres(language: string): Observable<{ genres: { id: number, name: string }[] }> {
+    const url = `${this.baseUrl}/genre/movie/list`;
+    const params = new HttpParams()
+      .set('api_key', this.apiKey)
+      .set('language', language)
+
+    return this.http.get<{ genres: { id: number, name: string }[] }>(url, { params });
+  }
 }
